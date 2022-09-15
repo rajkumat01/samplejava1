@@ -41,31 +41,6 @@ pipeline {
                 }
             }
         }
-         stage("SnapshotValidation and GetSnapshotsCreated"){
-            steps{
-                echo "Triggering Get snapshots for applicationName:${appName},deployableName:${deployName},changeSetId:${changeSetId}"
-                script{
-                    changeSetResults = snDevOpsConfigGetSnapshots(applicationName:"${appName}",deployableName:"${deployName}",changesetNumber:"${changeSetId}")
-                    echo "ChangeSet Result : ${changeSetResults}"
-                    def changeSetResultsObject = readJSON text: changeSetResults
-                         changeSetResultsObject.each {
-                           /* if(it.validation == "passed"){
-                                echo "validation passed for snapshot : ${it.name}"
-                                snapshotName = it.name
-                            }else{
-                                echo "Snapshot failed to get validated : ${it.name}" ;
-                                assert it.validation == "passed"
-                            }*/
-                            echo "validation passed for snapshot : ${it.name}"
-                            snapshotName = it.name 
-                        }
-                  if (!snapshotName?.trim()){
-                    error "No snapshot found to proceed" ;
-                  }
-                  echo "Snapshot Name : ${snapshotName} "  
-                }
-            }
-        }
       
         stage('Publish the snapshot'){
             steps{
