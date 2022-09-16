@@ -32,7 +32,7 @@ pipeline {
                 }
             }
         }
-        /*
+        
         stage("Committing the changeset"){
             steps{
                 script{
@@ -41,7 +41,7 @@ pipeline {
                     echo "change set registration set result ${changeSetRegResult}"
                 }
             }
-        } */
+        }
     }
     
     post {
