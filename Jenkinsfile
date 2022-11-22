@@ -1,4 +1,4 @@
-    def appName='App_1'
+  def appName='App_1'
     def snapName=''
     def deployName ='Dep_1'
     def exportFormat ='json'
@@ -15,10 +15,18 @@
 pipeline {
     agent any
     stages {
+        
+        stage('E2E_Pipeline1_1') {
+            steps {
+                echo "Running E2E_Pipeline1_1..........."
+                echo "MY_PARAM=${env.MY_PARAM}"
+            }
+        }
+        
         stage('Clone repository') {               
            steps{
                 // checkout scm
-                git branch: 'master', url: 'https://github.com/rajkumat01/samplejava1'
+                git branch: 'master1', url: 'https://github.com/rajkumat01/samplejava1'
            }
         }     
         stage('Upload JSON'){
@@ -36,12 +44,15 @@ pipeline {
             steps{
                 script{
                     echo "Change set registration for ${changeSetId}"
-                    changeSetRegResult = snDevOpsConfigRegisterPipeline(changesetNumber:"${changeSetId}")
+                    //changeSetRegResult = snDevOpsConfigRegisterPipeline(applicationName:"${appName}",changesetNumber:"${changeSetId}")
+                      changeSetRegResult = snDevOpsConfigRegisterPipeline(changesetNumber:"${changeSetId}")
                     echo "change set registration set result ${changeSetRegResult}"
                 }
             }
         }
-        stage("SnapshotValidation and GetSnapshotsCreated"){
+      
+      
+       stage("SnapshotValidation and GetSnapshotsCreated"){
             steps{
                 echo "Triggering Get snapshots for applicationName:${appName},deployableName:${deployName},changeSetId:${changeSetId}"
                 script{
@@ -55,7 +66,7 @@ pipeline {
                             }else{
                                 echo "Snapshot failed to get validated : ${it.name}" ;
                                 assert it.validation == "passed"
-                            }*/
+                            } */
                             echo "validation passed for snapshot : ${it.name}"
                             snapshotName = it.name 
                         }
@@ -66,7 +77,8 @@ pipeline {
                 }
             }
         }
-           stage('Publish the snapshot'){
+      
+        stage('Publish the snapshot'){
             steps{
                 script{
                     echo "Step to publish snapshot applicationName:${appName},deployableName:${deployName} snapshotName:${snapshotName}"
@@ -75,6 +87,8 @@ pipeline {
                 }
             }
         }
+
+
         stage('Deploy to the System'){
             steps{
                 echo "Devops Change trigger change request"
@@ -105,11 +119,4 @@ pipeline {
         }
     }
     
-    post {
-        success {
-            echo 'Run E2ESamplePipeLine1_1!'
-            build job: 'E2ESamplePipeLine1_1', parameters: [string(name: 'MY_PARAM', value: 'value from Build pipeline')]
-        }
-          
-    }
-}
+ }
