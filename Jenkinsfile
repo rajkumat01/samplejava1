@@ -38,11 +38,10 @@ pipeline {
                     echo "Change set registration for ${changeSetId}"
                     changeSetRegResult = snDevOpsConfigRegisterPipeline(changesetNumber:"${changeSetId}")
                     echo "change set registration set result ${changeSetRegResult}"
-                    //changeSetRegResult = snDevOpsConfigRegisterPipeline(applicationName:"${appName}",changesetNumber:"${changeSetId}")
                 }
             }
         }
-         stage("SnapshotValidation and GetSnapshotsCreated"){
+        stage("SnapshotValidation and GetSnapshotsCreated"){
             steps{
                 echo "Triggering Get snapshots for applicationName:${appName},deployableName:${deployName},changeSetId:${changeSetId}"
                 script{
