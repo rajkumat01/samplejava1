@@ -36,9 +36,9 @@ pipeline {
             steps{
                 script{
                     echo "Change set registration for ${changeSetId}"
-                    //changeSetRegResult = snDevOpsConfigRegisterPipeline(applicationName:"${appName}",changesetNumber:"${changeSetId}")
                     changeSetRegResult = snDevOpsConfigRegisterPipeline(changesetNumber:"${changeSetId}")
                     echo "change set registration set result ${changeSetRegResult}"
+                    //changeSetRegResult = snDevOpsConfigRegisterPipeline(applicationName:"${appName}",changesetNumber:"${changeSetId}")
                 }
             }
         }
